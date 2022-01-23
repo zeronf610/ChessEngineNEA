@@ -1,9 +1,10 @@
 import pygame as p
 from Chess import ChessEngine
 
-w = h = 400
+w = h = 512
 dimension = 8
 sqrSize = h/dimension
+max_fps = 15
 images = {}
 
 
@@ -21,10 +22,28 @@ def main():
     print(gs.board)
     loadpieceimages()
     running = True
+    sqrSelected = ()
+    clicks = []
     while running:
         for i in p.event.get():
             if i.type == p.QUIT:
                 running = False
+            elif i.type == p.MOUSEBUTTONDOWN:
+                location = p.mouse.get_pos()
+                col = location[0]//sqrSize
+                row = location[1]//sqrSize
+                if sqrSelected == (row, col):
+                    sqrSelected = ()
+                    clicks = []
+                else:
+                    sqrSelected = (row, col)
+                    clicks.append(sqrSelected)
+                if len(clicks) == 2:
+                    move = ChessEngine.Move(clicks[0], clicks[1], gs.board)
+                    print(move.getNotation())
+                    gs.doMove(move)
+                    sqrSelected = ()
+                    clicks = []
         drawgs(screen, gs)
         p.display.flip()
 
