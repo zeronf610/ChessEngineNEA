@@ -1,7 +1,7 @@
 import pygame as p
 from Chess import ChessEngine
 
-w = h = 512
+w = h = 400
 dimension = 8
 sqrSize = h/dimension
 max_fps = 15
