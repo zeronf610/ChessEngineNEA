@@ -2,8 +2,8 @@ import pygame as p
 from Chess import ChessEngine
 
 w = h = 400
-dimension = 8
-sqrSize = h/dimension
+xByY = 8
+sqrSize = h/xByY
 max_fps = 15
 images = {}
 
@@ -30,11 +30,11 @@ def main():
                 running = False
             elif i.type == p.MOUSEBUTTONDOWN:
                 location = p.mouse.get_pos()
-                col = location[0]//sqrSize
-                row = location[1]//sqrSize
+                col = (location[0])//sqrSize
+                row = (location[1])//sqrSize
                 if sqrSelected == (row, col):
                     sqrSelected = ()
-                    clicks = []
+                    clicks = ()
                 else:
                     sqrSelected = (row, col)
                     clicks.append(sqrSelected)
@@ -55,15 +55,15 @@ def drawgs(screen, gs):
 
 def drawboard(screen):
     colours = [p.Color("white"), p.Color("light blue")]
-    for x in range(dimension):
-        for y in range(dimension):
+    for x in range(xByY):
+        for y in range(xByY):
             colour = colours[((x+y) % 2)]
             p.draw.rect(screen, colour, p.Rect(y*sqrSize, x*sqrSize, sqrSize, sqrSize))
 
 
 def displaypieces(screen, board):
-    for a in range(dimension):
-        for b in range(dimension):
+    for a in range(xByY):
+        for b in range(xByY):
             piece = board[a][b]
             if piece != "--":
                 screen.blit(images[piece], p.Rect(b*sqrSize, a*sqrSize, sqrSize, sqrSize))
