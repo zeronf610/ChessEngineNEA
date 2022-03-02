@@ -11,7 +11,7 @@ images = {}
 def loadpieceimages():
     pieces = ['wP', 'wR', 'wN', 'wQ', 'wK', 'wB', 'bP', 'bR', 'bN', 'bQ', 'bK', 'bB']
     for piece in pieces:
-        images[piece] = p.transform.scale(p.image.load("chess images/images/" + piece + ".png"), (sqrSize, sqrSize))
+        images[piece] = p.transform.scale(p.image.load("chess images/" + piece + ".png"), (sqrSize, sqrSize))
 
 
 def main():
