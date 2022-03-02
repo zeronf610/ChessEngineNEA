@@ -1,6 +1,3 @@
-import self as self
-
-
 class GameState():
     def __init__(self):
         self.board = [
@@ -23,6 +20,9 @@ class GameState():
             self.whiteToMove = not self.whiteToMove   #switches the turn to black
 
 
+# board = [
+#         ["0,0", "1,0", "2,0", "3,0", "4,0", "5,0", "6,0", "7,0"],
+#         ["0,1", "1,1", "2,1",
 
 #class Pieces():
     #def __init__(self, colour, piece, position):
@@ -56,21 +56,23 @@ board = [
             ["wP", "wP", "wP", "wP", "wP", "wP", "wP", "wP"],
             ["wR", "wN", "wB", "wQ", "wK", "wB", "wN", "wR"]]
 class Pawn:
-    def __init__(self, x, y, colour):
+    def __init__(self, x, y, colour): #constructor
         self.row = y
         self.col = x
         self.colour = colour #attributes
 
-    def validMove(self, x, y):
+    def validMove(self, x, y): #validating pawn moves
         if self.colour == "white": #if it is a white pawn
-            if x == self.x and y-self.y == 1: #check if remains in same column and moves up 1 (y-self.y as indexes from 0)
+            if x == self.x and y-self.y == 1: #check if remains in same column and moves up 1 (y-self.y as indexes from 0, so moving up board is a decrease)
                 return True
             elif self.y == 6 and x == self.x and y-self.y == 2: #check if it is in starting pos, so it can move 2
                 return True
-            elif board[self.y+1][self.x+1] != "--" and abs(self.x-x) == 1 and y-self.y == 1:
+            elif board[self.y+1][self.x+1] != "--" and abs(self.x-x) == 1 and y-self.y == 1: #check if the
                 return True
             else:
                 return False
+        elif self.colour == "black": #validation for black pawn
+            pass
 
 
 
@@ -81,31 +83,15 @@ class Pawn:
 
 
 
-class Rook(x,y):
+#class Rook(x,y):
 
-class Bishop(x,y):
+#class Bishop(x,y):
 
-class Knight(x,y):
+#class Knight(x,y):
 
-class Queen(x,y):
+#class Queen(x,y):
 
-class King(x,y):
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-wP = Pawn(x, y)
+#class King(x,y):
 
 class Move():
 
@@ -118,12 +104,12 @@ class Move():
 
 
     def __init__(self, startSq, endSq, board):
-        self.startRow = int(startSq[0])
+        self.startRow = int(startSq[0]) #finds the x coordinate of the piece selected (int needed as used to calculate as a float rather than integer
         self.startCol = int(startSq[1])
         self.endRow = int(endSq[0])
         self.endCol = int(endSq[1])
-        self.pieceMoved = board[self.startRow][self.startCol]
-        self.pieceCaptured = board[self.endRow][self.endCol]
+        self.pieceMoved = board[self.startRow][self.startCol] #finds the piece moved by applying the x,y coords to the board
+        self.pieceCaptured = board[self.endRow][self.endCol] #finds the destination or piece captured by applying x,y coords to board
 
     def getNotation(self):
         return self.getRankFile(self.startRow, self.startCol) + self.getRankFile(self.endRow, self.endCol)
@@ -131,4 +117,3 @@ class Move():
     def getRankFile(self, a, b):
         return self.colsToFiles[b] + self.rowsToRanks[a]
 
-p8 = Pawn()
