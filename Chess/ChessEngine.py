@@ -72,7 +72,20 @@ class Pawn:
             else:
                 return False
         elif self.colour == "black": #validation for black pawn
-            pass
+            if x == self.x and self.y-y == 1:
+                return True
+            elif self.y == 1 and x == self.x and self.y-y == 2:
+                return True
+            elif board[self.y-1][self.x-1] != "--" and abs(self.x-x) == 1 and self.y-y == 1:
+                return True
+            else:
+                return False
+
+
+
+
+
+
 
 
 
@@ -100,14 +113,14 @@ class Move():
     rowsToRanks = {v: k for k, v in ranksToRows.items()}
     filesToCols = {"a": 0, "b": 1, "c": 2, "d": 3,
                    "e": 4, "f": 5, "g": 6, "h": 7}
-    colsToFiles = {v: k for k, v in filesToCols.items()}
+    colsToFiles = {v: k for k, v in filesToCols.items()}#maps out the index of the array to a chess notation style
 
 
     def __init__(self, startSq, endSq, board):
         self.startRow = int(startSq[0]) #finds the x coordinate of the piece selected (int needed as used to calculate as a float rather than integer
-        self.startCol = int(startSq[1])
-        self.endRow = int(endSq[0])
-        self.endCol = int(endSq[1])
+        self.startCol = int(startSq[1]) #finds the y coordinate of the piece selected
+        self.endRow = int(endSq[0]) #finds x of destination square
+        self.endCol = int(endSq[1]) #finds y of destination square
         self.pieceMoved = board[self.startRow][self.startCol] #finds the piece moved by applying the x,y coords to the board
         self.pieceCaptured = board[self.endRow][self.endCol] #finds the destination or piece captured by applying x,y coords to board
 
