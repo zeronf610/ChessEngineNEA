@@ -1,6 +1,6 @@
 class GameState():
     def __init__(self):
-        self.board = [
+        self.board = [  #the basic board, holds the starting position, and is used to load pieces
             ["bR", "bN", "bB", "bQ", "bK", "bB", "bN", "bR"],
             ["bP", "bP", "bP", "bP", "bP", "bP", "bP", "bP"],
             ["--", "--", "--", "--", "--", "--", "--", "--"],
@@ -9,32 +9,33 @@ class GameState():
             ["--", "--", "--", "--", "--", "--", "--", "--"],
             ["wP", "wP", "wP", "wP", "wP", "wP", "wP", "wP"],
             ["wR", "wN", "wB", "wQ", "wK", "wB", "wN", "wR"]]
-        self.objectBoard = [
-            [bR1, bN1, bB1, "bQ", "bK", bB2, bN2, bR2],
+        self.objectBoard = [ #board which holds the objects which will be accessed by the validMove function
+            [bR1, bN1, bB1, bQ, "bK", bB2, bN2, bR2],
             [bP1, bP2, bP3, bP4, bP5, bP6, bP7, bP8],
             ["--", "--", "--", "--", "--", "--", "--", "--"],
             ["--", "--", "--", "--", "--", "--", "--", "--"],
             ["--", "--", "--", "--", "--", "--", "--", "--"],
             ["--", "--", "--", "--", "--", "--", "--", "--"],
             [wP1, wP2, wP3, wP4, wP5, wP6, wP7, wP8],
-            [wR1, wN1, wB1, "wQ", "wK", wB2, wN2, wR2]]
-        self.whiteToMove = True
-        self.moveLog = []
+            [wR1, wN1, wB1, bQ, "wK", wB2, wN2, wR2]]
+        self.whiteToMove = True #boolean for determining whose move it is
+        self.moveLog = []  #holds all moves played
 
 
     def doMove(self, move):
         r1 = move.startRow
         c1 = move.startCol
         r2 = move.endRow
-        c2 = move.endCol
+        c2 = move.endCol  #variable definition
         selectedPiece = self.objectBoard[r1][c1]
+        print(selectedPiece.validMove(r2, c2))  #prints whether its valid or not (for testing)
 
         if self.board[r1][c1] != '--':  #checks if the piece selected is actually a piece
             if selectedPiece.validMove(r2, c2):
                 self.board[r1][c1] = '--'    #makes the initial square clicked empty ie. the piece has moved off this square
                 self.board[r2][c2] = move.pieceMoved  #puts the piece moved on the final/destination square
-                self.objectBoard[r1][c1] = '--'
-                self.objectBoard[r2][c2] = self.objectBoard[r1][c1]
+                self.objectBoard[r1][c1] = '--'  #makes initial square empty in objectBoard
+                self.objectBoard[r2][c2] = selectedPiece
                 self.moveLog.append(move)   #adds the move to the moveLogS
                 self.whiteToMove = not self.whiteToMove   #switches the turn to black
 
@@ -53,7 +54,7 @@ class Pawn:  #class which holds attributes of pawn and validation for pawn moves
 
     def updateXY(self, x, y):
         self.x = x
-        self.y = y
+        self.y = y  #updates the new values of x and y
 
     def getColour(self):
         return self.colour
@@ -87,7 +88,7 @@ class Knight(Pawn):
         self.colour = colour #attributes
 
     def validMove(self, x, y):  #move validation method
-            if abs(y-self.row) == 2 and abs(x-self.row) == 1 or abs(x-self.row) == 2 and abs(y-self.row) == 1:
+            if abs(y-self.row) == 2 and abs(x-self.row) == 1 or abs(x-self.row) == 2 and abs(y-self.row) == 1:  #if change in y is 2 and change in x is 1, or vice versa, return true
                 return True
             else:
                 return False
@@ -98,20 +99,16 @@ class Bishop(Pawn):  #class for bishop inheriting from pawn
         super().__init__(x, y, colour)  #takes these attributes from parent class
         self.row = y
         self.col = x
-        self.colour = colour
+        self.colour = colour #new attributes
 
 
     def validMove(self, x, y):  #validation for bishop
-        destination = self.objectBoard[self.endRow][self.endCol] #square to be moved to (final in the diagonal)
-        if destination == "--":  #if it is empty square
-            if abs(y-self.row) == abs(x-self.col):
-                return True  #if change in y = change in x return true (means its moving diagonally)
-            else:
-                return False
-        elif destination[0] != self.objectBoard[self.endRow][self.endCol][0]:
-            return True
+        if abs(y-self.row) == abs(x-self.col):
+            return True  #if change in y = change in x return true (means its moving diagonally)
         else:
             return False
+
+
 
 
 
@@ -120,12 +117,12 @@ class Rook(Pawn):
         super().__init__(x, y, colour)
         self.row = y
         self.col = x
-        self.colour = colour
+        self.colour = colour  #new attributes, inheritance stuff
 
     def validMove(self, x, y):
-        if self.col != x and self.row == y:
+        if self.col != x and self.row == y:  #if x changes and y remains the same
             return True
-        elif self.row != y and self.col == x:
+        elif self.row != y and self.col == x:  #if y changes and x remains same
             return True
         else:
             return False
@@ -138,10 +135,11 @@ class Queen(Pawn):
         super().__init__(x, y, colour)
         self.row = y
         self.col = x
-        self.colour = colour
+        self.colour = colour  #assigning new attributes
 
+    def validMove(self, x, y):
         if self.col != x and self.row == y or self.row != y and self.col == x or abs(y-self.row) == abs(x-self.col):
-            return True
+            return True  #combination of rook validation and bishop validation (see above functions)
         else:
             return False
 
@@ -185,25 +183,23 @@ wR2 = Rook(7, 7, "white")
 bR1 = Rook(0, 0, "black")
 bR2 = Rook(7, 0, "black")
 
+wQ = Queen(3, 7, "white")
+bQ = Queen(3, 0, "black")
+
+#wQ1 = Queen(3, 7, "white")
+#bQ1 = Queen(3, 0, "black")
+
 objectBoard = [
-            [bR1, bN1, bB1, "bQ", "bK", bB2, bN2, bR2],
+            [bR1, bN1, bB1, bQ, "bK", bB2, bN2, bR2],
             [bP1, bP2, bP3, bP4, bP5, bP6, bP7, bP8],
             ["--", "--", "--", "--", "--", "--", "--", "--"],
             ["--", "--", "--", "--", "--", "--", "--", "--"],
             ["--", "--", "--", "--", "--", "--", "--", "--"],
             ["--", "--", "--", "--", "--", "--", "--", "--"],
             [wP1, wP2, wP3, wP4, wP5, wP6, wP7, wP8],
-            [wR1, wN1, wB1, "wQ", "wK", wB2, wN2, wR2]]
+            [wR1, wN1, wB1, wQ, "wK", wB2, wN2, wR2]]
 
 class Move():
-
-    ranksToRows = {"1": 7, "2": 6, "3": 5, "4": 4, #dictionary
-                   "5": 3, "6": 2, "7": 1, "8": 0}
-    rowsToRanks = {v: k for k, v in ranksToRows.items()}
-    filesToCols = {"a": 0, "b": 1, "c": 2, "d": 3,
-                   "e": 4, "f": 5, "g": 6, "h": 7}
-    colsToFiles = {v: k for k, v in filesToCols.items()}#maps out the index of the array to a chess notation style
-
 
     def __init__(self, startSq, endSq, board):
         self.startRow = int(startSq[0]) #finds the x coordinate of the piece selected (int needed as used to calculate as a float rather than integer
@@ -213,10 +209,6 @@ class Move():
         self.pieceMoved = board[self.startRow][self.startCol] #finds the piece moved by applying the x,y coords to the board
         self.pieceCaptured = board[self.endRow][self.endCol] #finds the destination or piece captured by applying x,y coords to board
 
-
-
-    def getRankFile(self, a, b):
-        return self.colsToFiles[b] + self.rowsToRanks[a]
 
 
 
